@@ -27,7 +27,11 @@ class Login extends Component{
         fetch("https://reqres.in/api/login",options)
         .then((response)=>response.json())
         .then((response)=>{
-            console.log(response)
+            if(response.token==="QpwL5tke4Pnpja7X4"){
+                this.setState({
+                    status:true
+                })
+            }
         })
     }
 

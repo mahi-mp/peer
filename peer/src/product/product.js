@@ -15,7 +15,6 @@ class Product extends Component{
             this.setState({
                 data:respnse
             })
-            console.log(respnse)
         })
     }
     render(){
