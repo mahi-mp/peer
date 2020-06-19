@@ -1,55 +1,56 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import {AppContext} from '../contextProvider/Provider'
+import {useHistory} from 'react-router-dom'
 
-class Product extends Component{
-    constructor(props){
-        super(props)
-        this.state={
-            data:[]
-        }
-    }
+function Product(){
+    const [ data, setData ] = useState([])
 
-    componentDidMount(){
+    const { isAuth, setAuth } = useContext(AppContext)
+    const history = useHistory();
+
+    useEffect( ()=>{
         fetch(" https://api.punkapi.com/v2/beers")
-        .then((respnse)=>respnse.json())
-        .then((respnse)=>{
-            this.setState({
-                data:respnse
-            })
+        .then((response)=>response.json())
+        .then((response)=>{
+            setData(response)
         })
+    }, [ ] )
+
+    if(!isAuth){
+        history.push('/')
     }
-    render(){
-        return(
-            <div className="container">
-                <div className="d-flex justify-content-center">
-                    <h5 className="card-title">Beer List</h5>
-                </div>
-                <table className="table table-striped table-dark">
-                    <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.data.map((ele,index)=>{
-                                return(
-                                    <tr key={index}>
-                                        <th scope="row">{ele.id}</th>
-                                        <td>{ele.name}</td>
-                                        <td><img src={ele.image_url} width='100' height='100' alt={ele.name}/></td>
-                                        <td>{ele.description}</td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
+
+    return(
+        <div className="container">
+            <div className="d-flex justify-content-center">
+                <h5 className="card-title">Beer List</h5>
             </div>
-        )
-    }
+            <table className="table table-striped table-dark">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {
+                        data && data.map((ele,index)=>{
+                            return(
+                                <tr key={index}>
+                                    <th scope="row">{ele.id}</th>
+                                    <td>{ele.name}</td>
+                                    <td><img src={ele.image_url} width='100' height='100' alt={ele.name}/></td>
+                                    <td>{ele.description}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
+    )
 }
 
 export default Product;

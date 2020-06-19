@@ -1,15 +1,15 @@
-import React, { Component, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../contextProvider/Provider';
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 
 function  Login (){
-    const { isAuth, setAuth} =useContext(AppContext)
+    const { isAuth, setAuth, themes, themeName} =useContext(AppContext)
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
+    const history = useHistory()
 
     const changeStatus=()=>{
-        let url="https://reqres.in/api/login";
         var user = {
             email : email,
             password : password
@@ -27,17 +27,12 @@ function  Login (){
         .then((response)=>{
             if(response.token==="QpwL5tke4Pnpja7X4"){
                 setAuth(true)
-                // this.setState({
-                //     status:true
-                // })
             }
         })
     }
 
     if(isAuth){
-        return <Redirect to="/product" />
-        //  this.props.history.push("/product")
-        //  return null
+        history.push('/product')
     }
     return(
         <div className="container my-5 d-flex justify-content-center">
@@ -55,7 +50,7 @@ function  Login (){
                     </div>
                 </div>
                 <div className="form-group row">
-                    <div className="col-sm-10 d-flex justify-content-center">
+                    <div style={themes[themeName]} className="col-sm-10 d-flex justify-content-center">
                         <button onClick={()=>changeStatus()} className="btn btn-primary">Sign in</button>
                     </div>
                 </div>
